@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: all-manifests-applications
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: "https://github.com/madhav8890/argo-applicationSet.git"
+        revision: main 
+        directories:
+          - path: "all-Menifests/*" 
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/part-of: all-manifests-applications
+      name: "{{path.basename}}"
+    spec:
+      project: default
+      source:
+        repoURL: "https://github.com/madhav8890/argo-applicationSet.git" 
+        targetRevision: main 
+        path: "{{path}}"
+      destination:
+        namespace: testns
+        server: https://kubernetes.default.svc
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: false 

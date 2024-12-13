@@ -2,39 +2,40 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: helm-chart-applications
-  namespace: testns
+  namespace: argocd
 spec:
   generators:
     - matrix:
         generators:
           - git:
-              repoURL: "https://github.com/madhav8890/test-argo-repo.git"
+              repoURL: "https://github.com/madhav8890/argo-applicationSet.git"
               revision: main
               directories:
-                - path: charts/*
-          - list:
-              elements:
-                - namespace: dev
-                - namespace: prod
+                - path: tools-charts/*
+          # - list:
+          #     elements:
+          #       - service: service-a
+          #       - service: service-b
   template:
     metadata:
-      name: "{{namespace}}-{{path.basename}}"
+      # name: "{{service}}-{{path.basename}}"
+      name: "{{path.basename}}"
     spec:
       project: default
       source:
-        repoURL: "https://github.com/madhav8890/test-argo-repo.git"
+        repoURL: "https://github.com/madhav8890/argo-applicationSet.git"
         targetRevision: main
         path: "{{path}}"
         helm:
           valueFiles:
             - "values.yaml"
-            - "values-{{namespace}}.yaml"
+            # - "values-{{service}}.yaml"
       destination:
         server: "https://kubernetes.default.svc"
-        namespace: "{{namespace}}"
+        namespace: "testns"
       syncPolicy:
         syncOptions:
           - CreateNamespace=true
         automated:
           prune: true
-          selfHeal: true
+          selfHeal: false
