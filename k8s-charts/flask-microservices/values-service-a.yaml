@@ -1,0 +1,7 @@
+services:
+  - name: service-a
+    replicas: 1
+    image: madhav01/service-a:latest
+    containerPort: 5000
+    servicePort: 80
+    serviceBUrl: http://service-b

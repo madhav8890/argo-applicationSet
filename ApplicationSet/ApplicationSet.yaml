@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: helm-chart-applications
+  namespace: testns
+spec:
+  generators:
+    - matrix:
+        generators:
+          - git:
+              repoURL: "https://github.com/madhav8890/test-argo-repo.git"
+              revision: main
+              directories:
+                - path: charts/*
+          - list:
+              elements:
+                - namespace: dev
+                - namespace: prod
+  template:
+    metadata:
+      name: "{{namespace}}-{{path.basename}}"
+    spec:
+      project: default
+      source:
+        repoURL: "https://github.com/madhav8890/test-argo-repo.git"
+        targetRevision: main
+        path: "{{path}}"
+        helm:
+          valueFiles:
+            - "values.yaml"
+            - "values-{{namespace}}.yaml"
+      destination:
+        server: "https://kubernetes.default.svc"
+        namespace: "{{namespace}}"
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+          selfHeal: true

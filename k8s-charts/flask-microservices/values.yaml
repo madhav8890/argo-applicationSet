@@ -1,0 +1,14 @@
+services:
+  - name: service-a
+    replicas: 2
+    image: madhav01/service-a:latest
+    containerPort: 5000
+    servicePort: 80
+    serviceBUrl: http://service-b
+
+  - name: service-b
+    replicas: 2
+    image: madhav01/service-b:latest
+    containerPort: 5001
+    servicePort: 80
+    serviceAUrl: http://service-a

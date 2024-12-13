@@ -1,0 +1,29 @@
+{{- range .Values.services }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  labels:
+    app: {{ .name }}
+spec:
+  replicas: {{ .replicas }}
+  selector:
+    matchLabels:
+      app: {{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .name }}
+    spec:
+      containers:
+      - name: {{ .name }}
+        image: {{ .image }}
+        ports:
+        - containerPort: {{ .containerPort }}
+        env:
+        - name: SERVICE_A_URL
+          value: {{ .serviceAUrl | default "" }}
+        - name: SERVICE_B_URL
+          value: {{ .serviceBUrl | default "" }}
+---
+{{- end }}
