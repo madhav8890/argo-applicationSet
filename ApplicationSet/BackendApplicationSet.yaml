@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: Backend-charts-Application
+  name: backend-charts-application
   namespace: argocd
 spec:
   generators:
@@ -28,7 +28,7 @@ spec:
         helm:
           valueFiles:
             - "values.yaml"
-            - "values-{{service}}.yaml"
+            - "../values/values-{{service}}.yaml"
       destination:
         server: "https://kubernetes.default.svc"
         namespace: "testns"

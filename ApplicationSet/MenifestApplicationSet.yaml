@@ -7,9 +7,9 @@ spec:
   generators:
     - git:
         repoURL: "https://github.com/madhav8890/argo-applicationSet.git"
-        revision: main 
+        revision: main
         directories:
-          - path: "all-Menifests/*" 
+          - path: "all-Menifests/*"
   template:
     metadata:
       labels:
@@ -18,8 +18,8 @@ spec:
     spec:
       project: default
       source:
-        repoURL: "https://github.com/madhav8890/argo-applicationSet.git" 
-        targetRevision: main 
+        repoURL: "https://github.com/madhav8890/argo-applicationSet.git"
+        targetRevision: main
         path: "{{path}}"
       destination:
         namespace: testns
@@ -27,4 +27,4 @@ spec:
       syncPolicy:
         automated:
           prune: true
-          selfHeal: false 
+          selfHeal: false
